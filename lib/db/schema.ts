@@ -140,3 +140,64 @@ export enum ActivityType {
   INVITE_TEAM_MEMBER = 'INVITE_TEAM_MEMBER',
   ACCEPT_INVITATION = 'ACCEPT_INVITATION',
 }
+
+// --- Review Platform System ---
+
+export const platforms = pgTable('platforms', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 100 }).notNull().unique(),
+  baseUrl: text('base_url').notNull(),
+  logoUrl: text('logo_url'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const businesses = pgTable('businesses', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  url: text('url').notNull(),
+  platformId: integer('platform_id')
+      .notNull()
+      .references(() => platforms.id),
+  teamId: integer('team_id')
+      .notNull()
+      .references(() => teams.id),
+  lastCheckedAt: timestamp('last_checked_at'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const reviews = pgTable('reviews', {
+  id: serial('id').primaryKey(),
+  businessId: integer('business_id')
+      .notNull()
+      .references(() => businesses.id),
+  reviewerName: varchar('reviewer_name', { length: 255 }),
+  content: text('content').notNull(),
+  rating: integer('rating').notNull(), // 1–5 scale
+  publishedAt: timestamp('published_at').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+
+export const platformsRelations = relations(platforms, ({ many }) => ({
+  businesses: many(businesses),
+}));
+
+export const businessesRelations = relations(businesses, ({ one, many }) => ({
+  platform: one(platforms, {
+    fields: [businesses.platformId],
+    references: [platforms.id],
+  }),
+  team: one(teams, {
+    fields: [businesses.teamId],
+    references: [teams.id],
+  }),
+  reviews: many(reviews),
+}));
+
+export const reviewsRelations = relations(reviews, ({ one }) => ({
+  business: one(businesses, {
+    fields: [reviews.businessId],
+    references: [businesses.id],
+  }),
+}));
