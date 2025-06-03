@@ -1,9 +1,11 @@
 import { getBusinessWithReviews } from "@/services/businessService";
 import { format } from "date-fns";
-import { notFound } from "next/navigation";
+import {notFound, redirect} from "next/navigation";
 import Link from "next/link";
 import ReviewStatistics from "@/components/review-statistics";
 import {getReviewsForBusiness, getReviewStats} from "@/services/reviewService";
+import {getUser} from "@/services/authService";
+import {verifyBusinessAccess} from "@/lib/auth/business-access";
 
 
 interface PageProps {
@@ -16,12 +18,24 @@ interface PageProps {
 }
 
 export default async function BusinessReviewsPage({ params, searchParams }: PageProps) {
-  const page = searchParams.page ? parseInt(searchParams.page) : 1;
-  const business = await getBusinessWithReviews(parseInt(params.businessId));
-  
-  if (!business) {
+  const user = await getUser();
+  if (!user) {
+    redirect('/sign-in');
+  }
+
+  const businessId = parseInt(params.businessId);
+  // Verify access and get business data
+  const { business, teamMember } = await verifyBusinessAccess(businessId,user.id);
+  const selectedBusiness = await getBusinessWithReviews(parseInt(params.businessId));
+
+  if (!business || !selectedBusiness) {
     notFound();
   }
+
+  const page = searchParams.page ? parseInt(searchParams.page) : 1;
+
+
+
 
   const reviewStats = await getReviewStats(parseInt(params.businessId));
 
@@ -34,10 +48,10 @@ export default async function BusinessReviewsPage({ params, searchParams }: Page
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">{business.name}</h1>
+        <h1 className="text-3xl font-bold mb-2">{selectedBusiness.name}</h1>
         <div className="text-sm text-muted-foreground">
-          <span className="mr-4">Platform: {business.platform.name}</span>
-          <a href={business.url} target="_blank" rel="noopener noreferrer"
+          <span className="mr-4">Platform: {selectedBusiness.platform.name}</span>
+          <a href={selectedBusiness.url} target="_blank" rel="noopener noreferrer"
              className="text-primary hover:underline">
             View Business Page →
           </a>
