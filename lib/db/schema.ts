@@ -174,6 +174,7 @@ export const reviews = pgTable('reviews', {
   reviewerName: varchar('reviewer_name', { length: 255 }),
   content: text('content').notNull(),
   rating: integer('rating').notNull(), // 1–5 scale
+  link: text('link'),
   publishedAt: timestamp('published_at').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
