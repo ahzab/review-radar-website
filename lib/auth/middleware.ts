@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { TeamDataWithMembers, User } from '@/lib/db/schema';
-import { getTeamForUser, getUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
+import {getUser} from "@/services/authService";
+import {getTeamForUser} from "@/services/teamService";
 
 export type ActionState = {
   error?: string;
@@ -65,7 +66,7 @@ export function withTeam<T>(action: ActionWithTeamFunction<T>) {
       redirect('/sign-in');
     }
 
-    const team = await getTeamForUser();
+    const team = await x();
     if (!team) {
       throw new Error('Team not found');
     }

@@ -1,14 +1,13 @@
 import Stripe from 'stripe';
 import { redirect } from 'next/navigation';
 import { Team } from '@/lib/db/schema';
-import {
-  getTeamByStripeCustomerId,
-  getUser,
-  updateTeamSubscription
-} from '@/lib/db/queries';
+import {getUser} from "@/services/authService";
+import { getTeamByStripeCustomerId } from '@/services/teamService';
+import {updateTeamSubscription} from "@/services/subscriptionService";
+
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-04-30.basil'
+  apiVersion: '2025-05-28.basil'
 });
 
 export async function createCheckoutSession({
