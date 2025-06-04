@@ -6,20 +6,25 @@ import { eq } from 'drizzle-orm';
 // Mock the database module
 jest.mock('@/lib/db/drizzle', () => ({
   db: {
-    select: jest.fn().mockReturnThis(),
-    from: jest.fn().mockReturnThis(),
-    where: jest.fn().mockReturnThis(),
-    orderBy: jest.fn().mockReturnThis(),
-    leftJoin: jest.fn().mockReturnThis(),
-    update: jest.fn().mockReturnThis(),
-    set: jest.fn().mockReturnThis(),
-    insert: jest.fn().mockReturnThis(),
-    values: jest.fn().mockReturnThis(),
-    query: {
-      businesses: {
-        findFirst: jest.fn()
-      }
-    }
+    select: jest.fn(() => ({
+      from: jest.fn(() => ({
+        leftJoin: jest.fn(() => ({
+          where: jest.fn(() => ({
+            orderBy: jest.fn()
+          }))
+        }))
+      }))
+    })),
+    update: jest.fn(() => ({
+      set: jest.fn(() => ({
+        where: jest.fn()
+      }))
+    })),
+    insert: jest.fn(() => ({
+      values: jest.fn(() => ({
+        returning: jest.fn()
+      }))
+    }))
   }
 }));
 
@@ -51,12 +56,19 @@ describe('businessService', () => {
         }
       ];
 
-      // Mock the database response
-      (db.select as jest.Mock).mockReturnThis();
-      (db.from as jest.Mock).mockReturnThis();
-      (db.leftJoin as jest.Mock).mockReturnThis();
-      (db.where as jest.Mock).mockReturnThis();
-      (db.orderBy as jest.Mock).mockResolvedValue(mockBusinesses);
+      // Mock the chain of database calls
+      const mockOrderBy = jest.fn().mockResolvedValue(mockBusinesses);
+      const mockWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy });
+      const mockLeftJoin = jest.fn().mockReturnValue({ where: mockWhere });
+      const mockFrom = jest.fn().mockReturnValue({ leftJoin: mockLeftJoin });
+      const mockSelect = jest.fn().mockReturnValue({ from: mockFrom });
+      
+      (db.select as jest.Mock).mockImplementation(() => ({
+        from: mockFrom,
+        leftJoin: mockLeftJoin,
+        where: mockWhere,
+        orderBy: mockOrderBy
+      }));
 
       // Act
       const result = await getBusinessesForTeam(teamId);
@@ -66,10 +78,17 @@ describe('businessService', () => {
 
       // Verify database calls
       expect(db.select).toHaveBeenCalled();
-      expect(db.from).toHaveBeenCalledWith(businesses);
-      expect(db.leftJoin).toHaveBeenCalledWith(platforms, expect.any(Function));
-      expect(db.where).toHaveBeenCalledWith(expect.any(Function));
-      expect(db.orderBy).toHaveBeenCalledWith(businesses.createdAt);
+      expect(mockFrom).toHaveBeenCalledWith(businesses);
+      expect(mockLeftJoin).toHaveBeenCalledWith(
+        platforms, 
+        expect.objectContaining({
+          queryChunks: expect.arrayContaining([
+            expect.objectContaining({ value: expect.any(Array) })
+          ])
+        })
+      );
+      expect(mockWhere).toHaveBeenCalledWith(expect.any(Function));
+      expect(mockOrderBy).toHaveBeenCalledWith(businesses.createdAt);
     });
 
     it('should throw an error for invalid teamId', async () => {
@@ -87,7 +106,16 @@ describe('businessService', () => {
       const teamId = 1;
       
       // Mock the database to throw an error
-      (db.orderBy as jest.Mock).mockRejectedValue(new Error('Database error'));
+      const mockOrderBy = jest.fn().mockRejectedValue(new Error('Database error'));
+      (db.select as jest.Mock).mockImplementation(() => ({
+        from: jest.fn().mockReturnValue({
+          leftJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockReturnValue({
+              orderBy: mockOrderBy
+            })
+          })
+        })
+      }));
 
       // Act & Assert
       await expect(getBusinessesForTeam(teamId))
@@ -95,7 +123,4 @@ describe('businessService', () => {
         .toThrow('Failed to retrieve businesses: Database error');
     });
   });
-
-  // Additional tests for other functions would follow the same pattern
-  // For brevity, I'm including just one function's tests as an example
 });
