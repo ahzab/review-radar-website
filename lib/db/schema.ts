@@ -4,7 +4,7 @@ import {
   varchar,
   text,
   timestamp,
-  integer,
+  integer, boolean,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -161,6 +161,7 @@ export const businesses = pgTable('businesses', {
   teamId: integer('team_id')
       .notNull()
       .references(() => teams.id),
+  disabled: boolean('disabled').notNull().default(false),
   lastCheckedAt: timestamp('last_checked_at'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
