@@ -1,11 +1,9 @@
-
 'use client';
 
 import { format } from "date-fns";
 import { MessageSquarePlus, ExternalLink, ThumbsUp, Flag, Share2, MoreHorizontal, Star } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
 import {AiReplyButton} from "@/components/ai-reply-cutton";
 
 interface ReviewCardProps {
@@ -20,16 +18,15 @@ interface ReviewCardProps {
 }
 
 export function ReviewCard({ review }: ReviewCardProps) {
-    const [isHelpful, setIsHelpful] = useState(false);
 
     return (
         <div className="bg-white rounded-xl shadow-sm p-6 transition-all hover:shadow-md border border-gray-100">
             <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-4">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center ring-2 ring-orange-50">
-            <span className="text-orange-700 font-medium">
-              {review.reviewerName?.[0] || 'A'}
-            </span>
+                        <span className="text-orange-700 font-medium">
+                            {review.reviewerName?.[0] || 'A'}
+                        </span>
                     </div>
 
                     <div>
@@ -103,19 +100,6 @@ export function ReviewCard({ review }: ReviewCardProps) {
                 >
                     <MessageSquarePlus className="h-4 w-4 mr-2" />
                     Reply
-                </Button>
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className={`${
-                        isHelpful
-                            ? "text-green-600 hover:text-green-700"
-                            : "text-gray-500 hover:text-gray-700"
-                    }`}
-                    onClick={() => setIsHelpful(!isHelpful)}
-                >
-                    <ThumbsUp className="h-4 w-4 mr-2" />
-                    {isHelpful ? 'Helpful' : 'Mark as Helpful'}
                 </Button>
             </div>
         </div>

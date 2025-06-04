@@ -9,6 +9,8 @@ import {
   Shield,
   Clock
 } from 'lucide-react';
+// First, add these new imports at the top
+import { Check, HelpCircle } from 'lucide-react';
 import {LogoCloud} from "@/components/marketing/logo-cloud";
 import {TestimonialCard} from "@/components/marketing/testimonial-card";
 import {DashboardPreview} from "@/components/marketing/dashboard-preview";
@@ -124,6 +126,167 @@ export default function HomePage() {
               role="Marketing Director, ServicePro"
               rating={5}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              How ReviewRadar Works
+            </h2>
+            <p className="mt-4 text-xl text-gray-600">
+              Get started in minutes and take control of your online reputation
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-red-600">1</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Connect Your Platforms</h3>
+              <p className="text-gray-600">Link your review profiles from multiple platforms in one dashboard</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-red-600">2</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Set Up Alerts</h3>
+              <p className="text-gray-600">Customize your notification preferences for different types of reviews</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-red-600">3</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Respond & Analyze</h3>
+              <p className="text-gray-600">Use AI to respond quickly and track your reputation metrics</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              Simple, Transparent Pricing
+            </h2>
+            <p className="mt-4 text-xl text-gray-600">
+              Choose the perfect plan for your business
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Starter",
+                price: "49",
+                description: "Perfect for small businesses",
+                features: [
+                  "Monitor up to 3 platforms",
+                  "Basic review alerts",
+                  "5 AI-powered responses per month",
+                  "Basic analytics"
+                ]
+              },
+              {
+                name: "Professional",
+                price: "99",
+                description: "Most popular for growing businesses",
+                features: [
+                  "Monitor up to 10 platforms",
+                  "Advanced review alerts",
+                  "50 AI-powered responses per month",
+                  "Advanced analytics",
+                  "Competitor tracking",
+                  "Priority support"
+                ]
+              },
+              {
+                name: "Enterprise",
+                price: "299",
+                description: "For large organizations",
+                features: [
+                  "Unlimited platform monitoring",
+                  "Real-time alerts",
+                  "Unlimited AI responses",
+                  "Custom analytics",
+                  "API access",
+                  "Dedicated support"
+                ]
+              }
+            ].map((plan) => (
+              <div key={plan.name} className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
+                <p className="text-gray-600 mt-2">{plan.description}</p>
+                <div className="mt-4 mb-8">
+                  <span className="text-4xl font-bold">${plan.price}</span>
+                  <span className="text-gray-600">/month</span>
+                </div>
+                <ul className="space-y-3">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-center gap-2">
+                      <Check className="h-5 w-5 text-green-500" />
+                      <span className="text-gray-600">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button className="w-full mt-8" variant={plan.name === "Professional" ? "default" : "outline"}>
+                  Get Started
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              Frequently Asked Questions
+            </h2>
+            <p className="mt-4 text-xl text-gray-600">
+              Everything you need to know about ReviewRadar
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {[
+              {
+                question: "Which platforms do you monitor?",
+                answer: "We monitor all major review platforms including Google, Yelp, TripAdvisor, Facebook, G2, Capterra, and more. Custom platform integration is available on Enterprise plans."
+              },
+              {
+                question: "How quickly are alerts sent?",
+                answer: "Our system checks for new reviews every 5 minutes. Alerts are sent instantly when negative reviews are detected."
+              },
+              {
+                question: "Can I customize the AI responses?",
+                answer: "Yes! You can set your brand voice, tone, and specific guidelines for the AI to follow when generating responses."
+              },
+              {
+                question: "Is there a contract or commitment?",
+                answer: "No, all our plans are month-to-month and you can cancel anytime. We also offer annual plans with a discount."
+              }
+            ].map((faq) => (
+              <div key={faq.question} className="border-b border-gray-200 pb-6">
+                <div className="flex items-start gap-2">
+                  <HelpCircle className="h-6 w-6 text-red-600 flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-lg text-gray-900">{faq.question}</h3>
+                    <p className="mt-2 text-gray-600">{faq.answer}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
