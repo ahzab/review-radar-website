@@ -23,7 +23,7 @@ export default async function BusinessReviewsPage({ params, searchParams }: Page
     redirect('/sign-in');
   }
 
-  const businessId = parseInt(params.businessId);
+  const businessId = parseInt(await params.businessId);
   // Verify access and get business data
   const { business, teamMember } = await verifyBusinessAccess(businessId,user.id);
   const selectedBusiness = await getBusinessWithReviews(parseInt(params.businessId));
@@ -37,11 +37,11 @@ export default async function BusinessReviewsPage({ params, searchParams }: Page
 
 
 
-  const reviewStats = await getReviewStats(parseInt(params.businessId));
+  const reviewStats = await getReviewStats(businessId);
 
 
   const { reviews, totalPages, currentPage } = await getReviewsForBusiness(
-    parseInt(params.businessId),
+      businessId,
     page
   );
 
