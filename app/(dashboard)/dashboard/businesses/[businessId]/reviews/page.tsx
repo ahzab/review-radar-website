@@ -113,40 +113,32 @@ export default async function BusinessReviewsPage({ params, searchParams }: Page
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-8">
-          {currentPage > 1 && (
-            <Link
-              href={`/dashboard/businesses/${params.businessId}/reviews?page=${currentPage - 1}`}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-            >
-              Previous
-            </Link>
-          )}
-
-          {[...Array(totalPages)].map((_, i) => (
-            <Link
-              key={i + 1}
-              href={`/dashboard/businesses/${params.businessId}/reviews?page=${i + 1}`}
-              className={`px-4 py-2 text-sm font-medium rounded-md ${
-                currentPage === i + 1
-                  ? "bg-primary text-white"
-                  : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-50"
-              }`}
-            >
-              {i + 1}
-            </Link>
-          ))}
-
-          {currentPage < totalPages && (
-            <Link
-              href={`/dashboard/businesses/${params.businessId}/reviews?page=${currentPage + 1}`}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-            >
-              Next
-            </Link>
-          )}
-        </div>
-      )}
+  <nav className="flex justify-center items-center gap-1 mt-8">
+    <Link
+      href={`/dashboard/businesses/${params.businessId}/reviews?page=${currentPage - 1}`}
+      className={`p-2 rounded-md hover:bg-gray-100 transition-colors ${
+        currentPage <= 1 ? 'invisible' : ''
+      }`}
+      aria-label="Previous page"
+    >
+      ←
+    </Link>
+    
+    <span className="px-3 py-1 text-sm">
+      {currentPage} / {totalPages}
+    </span>
+    
+    <Link
+      href={`/dashboard/businesses/${params.businessId}/reviews?page=${currentPage + 1}`}
+      className={`p-2 rounded-md hover:bg-gray-100 transition-colors ${
+        currentPage >= totalPages ? 'invisible' : ''
+      }`}
+      aria-label="Next page"
+    >
+      →
+    </Link>
+  </nav>
+)}
     </div>
   );
 }
