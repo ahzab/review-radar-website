@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { MessageSquarePlus, ExternalLink, ThumbsUp, Flag, Share2, MoreHorizontal, Star } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import {AiReplyButton} from "@/components/ai-reply-cutton";
+import {AiReplyButton} from "@/components/ai-reply-button";
 
 interface ReviewCardProps {
     review: {

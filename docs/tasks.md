@@ -4,11 +4,11 @@ This document contains a prioritized list of improvement tasks for the Review Ra
 
 ## Code Quality and Structure
 
-- [ ] Fix typo in component filename: Rename `ai-reply-cutton.tsx` to `ai-reply-button.tsx` and update all imports
-- [ ] Add comprehensive error handling to all service functions
-- [ ] Implement input validation for all API endpoints and service functions
-- [ ] Add proper TypeScript return types to all functions in service files
-- [ ] Remove commented-out code (e.g., old `getReviewsForBusiness` function in reviewService.ts)
+- [x] Fix typo in component filename: Rename `ai-reply-cutton.tsx` to `ai-reply-button.tsx` and update all imports
+- [ ] Add comprehensive error handling to all service functions (partially completed for reviewService.ts)
+- [ ] Implement input validation for all API endpoints and service functions (partially completed for reviewService.ts)
+- [ ] Add proper TypeScript return types to all functions in service files (partially completed for reviewService.ts)
+- [x] Remove commented-out code (e.g., old `getReviewsForBusiness` function in reviewService.ts)
 - [ ] Create consistent error handling pattern across the application
 - [ ] Add unit tests for all service functions
 - [ ] Implement proper logging system instead of console.error calls
