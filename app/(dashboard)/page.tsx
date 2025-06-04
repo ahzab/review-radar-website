@@ -141,7 +141,7 @@ export default function HomePage() {
               Get started in minutes and take control of your online reputation
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-12">
             <div className="text-center">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -150,7 +150,7 @@ export default function HomePage() {
               <h3 className="text-xl font-semibold mb-2">Connect Your Platforms</h3>
               <p className="text-gray-600">Link your review profiles from multiple platforms in one dashboard</p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-red-600">2</span>
@@ -158,7 +158,7 @@ export default function HomePage() {
               <h3 className="text-xl font-semibold mb-2">Set Up Alerts</h3>
               <p className="text-gray-600">Customize your notification preferences for different types of reviews</p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-red-600">3</span>
