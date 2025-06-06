@@ -45,13 +45,14 @@ export default async function ReviewsPage({ params, searchParams }: PageProps) {
     : 0;
 
   const totalReviews = reviewStats.totalReviews || 0;
-  
-  const positiveReviews = reviewStats.ratingsDistribution 
-    ? ((reviewStats.ratingsDistribution[4] || 0) + (reviewStats.ratingsDistribution[5] || 0)) 
-    : 0;
-    
-  const positivePercentage = totalReviews > 0 
-    ? Math.round((positiveReviews / totalReviews) * 100) 
+
+  const positiveReviewsCount = reviewStats.ratingDistribution
+      .filter(r => r.rating > 3)
+      .reduce((sum, r) => sum + r.count, 0);
+
+
+  const positivePercentage = totalReviews > 0
+    ? Math.round((positiveReviewsCount / totalReviews) * 100)
     : 0;
 
   return (
