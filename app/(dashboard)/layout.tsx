@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { use, useState, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { CircleIcon, Home, LogOut } from 'lucide-react';
 import {
@@ -11,22 +11,15 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { signOut } from '@/app/(login)/actions';
 import { useRouter } from 'next/navigation';
-import { User } from '@/lib/db/schema';
-import useSWR from 'swr';
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { useAuth } from '@/lib/auth/next-auth-client';
 
 function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data: user } = useSWR<User>('/api/user', fetcher);
-  const router = useRouter();
+  const { user, logout } = useAuth();
 
   async function handleSignOut() {
-    await signOut();
-    router.refresh();
-    router.push('/');
+    await logout();
   }
 
   if (!user) {
@@ -52,9 +45,8 @@ function UserMenu() {
           <AvatarImage alt={user.name || ''} />
           <AvatarFallback>
             {user.email
-              .split(' ')
-              .map((n) => n[0])
-              .join('')}
+              ? user.email.charAt(0).toUpperCase()
+              : '?'}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -65,14 +57,10 @@ function UserMenu() {
             <span>Dashboard</span>
           </Link>
         </DropdownMenuItem>
-        <form action={handleSignOut} className="w-full">
-          <button type="submit" className="flex w-full">
-            <DropdownMenuItem className="w-full flex-1 cursor-pointer">
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Sign out</span>
-            </DropdownMenuItem>
-          </button>
-        </form>
+        <DropdownMenuItem className="w-full flex-1 cursor-pointer" onClick={handleSignOut}>
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Sign out</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

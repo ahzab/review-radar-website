@@ -1,7 +1,7 @@
 import { db } from '@/lib/db/drizzle';
 import { teams, teamMembers, users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
-import { getUser } from './authService';
+import { getUser } from '@/lib/auth/next-auth-utils';
 
 export async function getTeamByStripeCustomerId(customerId: string) {
     const [team] = await db
@@ -13,12 +13,19 @@ export async function getTeamByStripeCustomerId(customerId: string) {
     return team ?? null;
 }
 
-export async function getTeamForUser() {
-    const user = await getUser();
-    if (!user) return null;
+export async function getTeamForUser(userId?: number) {
+    let userIdToUse: number;
+
+    if (userId) {
+        userIdToUse = userId;
+    } else {
+        const user = await getUser();
+        if (!user) return null;
+        userIdToUse = user.id;
+    }
 
     const result = await db.query.teamMembers.findFirst({
-        where: eq(teamMembers.userId, user.id),
+        where: eq(teamMembers.userId, userIdToUse),
         with: {
             team: {
                 with: {
